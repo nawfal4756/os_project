@@ -1,0 +1,7 @@
+#!/bin/bash
+
+whatis=$(whatis $1)
+whereis=$(whereis $1)
+
+printf "whatis: $whatis\n"
+printf "whereis: $whereis\n"
