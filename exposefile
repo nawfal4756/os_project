@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo cp $1 /var/www/html
+sudo systemctl start apache2
+ip=$(hostname -I)
+ip=$(tr -d ' ' <<< $ip)
+printf "File can be accessed through http://$ip/$1\n"
