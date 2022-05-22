@@ -1,0 +1,15 @@
+#!/bin/bash
+
+filename=$1
+filename=${filename%.*}
+compiled=false
+
+gcc $1 -o $filename &
+wait
+if [[ "$?" -eq 0 ]]; then
+    compiled=true
+fi
+
+if [ $compiled ]; then
+    ./$filename
+fi
