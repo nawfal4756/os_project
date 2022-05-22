@@ -1,0 +1,36 @@
+#!/bin/bash
+
+help() {
+    printf "Flags:\ne) set file executable\nh) help\nn) Do not save creation time and date\n"
+}
+
+error() {
+    printf "Incorrect Option! Use -h to get help"
+}
+
+while getopts ":ehn" opt; do
+    case $opt in
+        e) e=true;;
+        h) 
+            help 
+            exit 1
+            ;;
+        n) n=false;;
+        \?) 
+            error
+            exit 1;
+    esac
+done
+shift $((OPTIND -1))
+
+touch $1 &
+wait
+
+if [ $e ]; then
+    chmod u+x $1
+fi
+
+pwd=$(pwd)
+date=$(date)
+cd
+echo "$pwd/$1 $date" > creation.txt
