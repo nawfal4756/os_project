@@ -1,0 +1,54 @@
+#!/bin/bash
+
+destination=" "
+file=" "
+count=1
+time=0
+fflag=false
+dflag=false
+
+backup() {
+    while [[ $count -gt 0 ]]
+    do
+        cp $file $destination
+        ((count--))
+        sleep 0
+    done
+}
+
+help() {
+    printf "Usage: fibackup [flags]\nFlags:\nd) Destination for backup\nf) File Name of the file to backup\nc) Number of times to run backup (Default is 1)\nt) After how any seconds too run backup again (Default is 0)\nh) help\n"
+}
+
+error() {
+    printf "Incorrect Option = $1\nUse -h to get help"
+}
+
+while getopts ":d:f:c:t:h" opt; do
+    case $opt in
+        d) destination=$OPTARG; dflag=true;;
+        f) file=$OPTARG; fflag=true;;
+        c) count=$OPTARG;;
+        t) time=$OPTARG;;
+        h) 
+            help $OPTARG
+            exit 1
+            ;;
+        \?) 
+            error
+            exit 1
+            ;;
+        :) 
+            printf "$opt = Value is required! You may use -h for help\n"
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND -1))
+
+if [[ $fflag -eq false && $dflag -eq false ]]; then
+    printf "Required Flags Missing! You may use -h for help\n"
+    exit 1
+fi
+
+backup &
