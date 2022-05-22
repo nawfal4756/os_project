@@ -1,0 +1,47 @@
+#!/bin/bash
+
+timerCall() {
+    echo "Timer set with $1 seconds"
+    sleep $1
+    vlc ~/Downloads/alarm.mp3
+}
+
+help() {
+    printf "Usage: timer [flags]\nFlags:\nh) hours\nm) minutes\ns) seconds\nq) help\n"
+}
+
+error() {
+    printf "Incorrect Option! Use -q to get help"
+}
+
+hour=0
+min=0
+sec=0
+
+while getopts ":h:m:s:q" opt; do
+    case $opt in
+        h) hour=$OPTARG;;
+        m) min=$OPTARG;;
+        s) sec=$OPTARG;;
+        q) 
+            help
+            exit 1
+            ;;
+        \?) 
+            error
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND -1))
+
+if [[ $hour -eq 0 && $min -eq 0 && $sec -eq 0 ]]; then
+    echo "No time selected. Run with -q to see usage"
+    exit 1
+fi
+
+((hour=$hour*60*60))
+((min=$min*60))
+((total=$hour+$min+$sec))
+
+timerCall $total &
