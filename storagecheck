@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "df:"
+df -h $1
+echo "du:"
+du -h $1
