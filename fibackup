@@ -4,16 +4,17 @@ destination=" "
 file=" "
 count=1
 time=0
-fflag=false
-dflag=false
+fflag=0
+dflag=0
 
 backup() {
     while [[ $count -gt 0 ]]
     do
         cp $file $destination
         ((count--))
-        sleep 0
+        sleep $time
     done
+    printf "File backup process completed!"
 }
 
 help() {
@@ -26,8 +27,8 @@ error() {
 
 while getopts ":d:f:c:t:h" opt; do
     case $opt in
-        d) destination=$OPTARG; dflag=true;;
-        f) file=$OPTARG; fflag=true;;
+        d) destination=$OPTARG; dflag=1;;
+        f) file=$OPTARG; fflag=1;;
         c) count=$OPTARG;;
         t) time=$OPTARG;;
         h) 
@@ -46,7 +47,7 @@ while getopts ":d:f:c:t:h" opt; do
 done
 shift $((OPTIND -1))
 
-if [[ $fflag -eq false && $dflag -eq false ]]; then
+if [[ $fflag -eq 0 || $dflag -eq 0 ]]; then
     printf "Required Flags Missing! You may use -h for help\n"
     exit 1
 fi
