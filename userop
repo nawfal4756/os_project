@@ -1,0 +1,33 @@
+#!/bin/bash
+
+help() {
+    printf "Usage: userop [flags] [USER]\nFlags:\ng) Add to specific group\nh) help\n"
+}
+
+error() {
+    printf "Incorrect Option! Use -q to get help"
+}
+
+group=0
+groupname=""
+
+while getopts ":g:h" opt; do
+    case $opt in
+        g) groupname=$OPTARG;group=1;;
+        h) help; exit 1;;
+        \?) error; exit 1;;
+        :) printf "$opt = Value is required! You may use -h for help\n"; exit 1;;
+    esac
+done
+shift $((OPTIND -1))
+
+echo "Enter password for the account"
+read -s password
+
+if [[ $group -eq 0 ]]; then
+    sudo useradd $1 -U -p $password -s /bin/bash &
+else
+    sudo useradd $1 -G $groupname -U -p $password -s /bin/bash &
+fi
+wait
+finger $1
