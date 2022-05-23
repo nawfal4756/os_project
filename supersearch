@@ -1,0 +1,52 @@
+#!/bin/bash
+
+help() {
+    printf "Usage: supersearch [flags]\n
+Flags:
+    f) Directory and file name to search. Must be used in conjunction with w flag!
+    w) Word to search in the file. Must be used in conjunction with f flag!
+    e) Extension of files to search
+    h) help\n"
+}
+
+error() {
+    printf "Incorrect Option! Use -q to get help"
+}
+
+fnflag=0
+wordflag=0
+extflag=0
+
+filename=""
+extension=""
+word=""
+
+while getopts ":f:e:w:h" opt; do
+    case $opt in
+        f) filename=$OPTARG;fnflag=1;;
+        e) extension=$OPTARG;extflag=1;;
+        w) word=$OPTARG;wordflag=1;;
+        h) help; exit 1;;
+        :) printf "$opt = Value is required! You may use -h for help\n"; exit 1;;
+        \?) error; exit 1;;
+    esac
+done
+shift $((OPTIND -1))
+
+if [[ $fnflag -eq 0 && $wordflag -eq 0 && $extflag -eq 0 ]]; then
+    printf "One flag minimum should be used! Use -h for more info!\n"
+    exit 1
+fi
+
+if [[ $fnflag -eq 1 || $wordflag -eq 1 ]]; then
+    if [[ $fnflag -ne 1 || $wordflag -ne 1 ]]; then
+        printf "f and w flags must be used in conjuction! Use -h for more info!\n"
+        exit 1
+    fi
+fi
+
+if [[ $fnflag -eq 1 && $wordflag -eq 1 ]]; then
+    cat $filename | grep $word
+else
+    find *.$extension
+fi
