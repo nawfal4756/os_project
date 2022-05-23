@@ -1,0 +1,22 @@
+#!/bin/bash
+
+help() {
+    printf "Usage: supersearch [flags]\n
+Flags:
+    f) Directory and file name to search. Must be used in conjunction with w flag!
+    w) Word to search in the file. Must be used in conjunction with f flag!
+    e) Extension of files to search
+    h) help\n"
+}
+
+error() {
+    printf "Incorrect Option! Use -q to get help"
+}
+
+while getopts ":" opt; do
+    case $opt in
+
+    esac
+done
+
+curl http://www.floatrates.com/daily/usd.json | jq '.pkr' | jq '.rate'
