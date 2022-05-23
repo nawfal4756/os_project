@@ -1,0 +1,53 @@
+#!/bin/bash
+
+help() {
+    printf "Usage: auxrep -w [word] [flags]
+Flags:
+    p) Permanently kill task
+    t) Temporarily kill task
+    w) Word to search from processes list (Required)
+    h) help
+    NOTE: Either p or t flag should be selected\n"
+}
+
+error() {
+    printf "Incorrect Option! Use -h to get help"
+}
+
+permanentflag=0
+tempflag=0
+word=""
+wordflag=0
+killid=0
+
+while getopts ":ptw:h" opt; do
+    case $opt in
+        p) permanentflag=1;;
+        t) tempflag=1;;
+        w) word=$OPTARG; wordflag=1;;
+        h) help; exit 1;;
+        \?) error; exit 1;;
+        :) printf "$OPTARG = Value is required! You may use -h for help\n"; exit 1;;
+    esac
+done
+
+if [[ $wordflag -eq 0 ]]; then
+    printf "Cannot run without w flag! Refer to -h for help\n"
+    exit 1
+fi
+
+if [[ $permanentflag -eq 0 && $tempflag -eq 0 ]]; then
+    printf "At least t or p flag should be selected! Refer to -h for help\n"
+    exit 1
+fi
+
+if [[ $permanentflag -eq 1 ]]; then
+    killid=9
+elif [[ $tempflag -eq 1 ]]; then
+    killid=15
+fi
+
+
+echo $(ps aux | grep $word)
+read -p "Enter process id to kill: " processID
+sudo kill -$killid $processID
