@@ -11,6 +11,7 @@ error() {
     printf "Incorrect Option! Use -h to get help"
 }
 
+rate=0
 oppflag=0
 
 while getopts ":oh" opt; do
@@ -22,8 +23,13 @@ while getopts ":oh" opt; do
 done
 shift $((OPTIND -1))
 
+
 if [[ $oppflag -eq 1 ]]; then
-    curl http://www.floatrates.com/daily/usd.json | jq .$1 | jq '.inverseRate'
+    echo "Waiting for Rate"
+    echo -n "1 $1 to USD: "
+    curl -s http://www.floatrates.com/daily/usd.json | jq .$1 | jq '.inverseRate'
 else
-    curl http://www.floatrates.com/daily/usd.json | jq .$1 | jq '.rate'
+    echo "Waiting for Rate"
+    echo -n "1 USD to $1: "
+    curl -s http://www.floatrates.com/daily/usd.json | jq .$1 | jq '.rate'
 fi
