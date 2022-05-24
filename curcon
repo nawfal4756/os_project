@@ -1,22 +1,29 @@
 #!/bin/bash
 
 help() {
-    printf "Usage: supersearch [flags]\n
+    printf "Usage: curcon [flags] [CURRENCYCODE]\n
 Flags:
-    f) Directory and file name to search. Must be used in conjunction with w flag!
-    w) Word to search in the file. Must be used in conjunction with f flag!
-    e) Extension of files to search
-    h) help\n"
+    o) Show the opposite rate
+    h) to show this page\n"
 }
 
 error() {
-    printf "Incorrect Option! Use -q to get help"
+    printf "Incorrect Option! Use -h to get help"
 }
 
-while getopts ":" opt; do
-    case $opt in
+oppflag=0
 
+while getopts ":oh" opt; do
+    case $opt in
+        o) oppflag=1;;
+        h) help; exit 1;;
+        \?) error; exit 1;;
     esac
 done
+shift $((OPTIND -1))
 
-curl http://www.floatrates.com/daily/usd.json | jq '.pkr' | jq '.rate'
+if [[ $oppflag -eq 1 ]]; then
+    curl http://www.floatrates.com/daily/usd.json | jq .$1 | jq '.inverseRate'
+else
+    curl http://www.floatrates.com/daily/usd.json | jq .$1 | jq '.rate'
+fi
