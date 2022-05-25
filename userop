@@ -5,7 +5,7 @@ help() {
 }
 
 error() {
-    printf "Incorrect Option! Use -q to get help"
+    printf "Incorrect Option! Use -h to get help"
 }
 
 group=0
