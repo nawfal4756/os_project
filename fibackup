@@ -14,7 +14,7 @@ backup() {
         ((count--))
         sleep $time
     done
-    printf "File backup process completed!"
+    printf "File backup process completed!\n"
 }
 
 help() {
