@@ -30,6 +30,7 @@ while getopts ":ptw:h" opt; do
         :) printf "$OPTARG = Value is required! You may use -h for help\n"; exit 1;;
     esac
 done
+shift $((OPTIND -1))
 
 if [[ $wordflag -eq 0 ]]; then
     printf "Cannot run without w flag! Refer to -h for help\n"
