@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sudo cp auxrep ccompile create curcon exposefile fastinstall fibackup mcdir storagecheck supersearch timer userop wwcombo /bin &
+wait
+cd /bin
+sudo chmod 777 auxrep ccompile create curcon exposefile fastinstall fibackup mcdir storagecheck supersearch timer userop wwcombo
